@@ -17,26 +17,36 @@ This is an ecommerce microservices app consisting of several microservices as li
 
 3. Navigate to the root directory of the repository in your terminal.
 
-4. Run the following command to build and start the app:
+4. Create a .env file in the root directory of the repository with the following environment variables:
 
-    ```
-    docker-compose up -d
-    ```
+POSTGRES_HOST=<database_host>
+POSTGRES_DATABASE_PORT=<database_port>
+POSTGRES_DATABASE_USER=<database_user>
+POSTGRES_DATABASE_PASSWORD=<database_password>
+POSTGRES_DATABASE_NAME=<database_name>
 
-5. Once the containers are up and running, you can access the various services using the following URLs:
+Replace the placeholders with your own values for the Postgres database. This file will be used by the Docker Compose configuration to set environment variables in the containers.
 
-    - Orders App: http://localhost:3000
-    - Products App: http://localhost:3002
-    - Payments App: http://localhost:3001
-    - Users App: http://localhost:3003
+5. Run the following command to build and start the app:
 
-    Note: The API Gateway App is not accessible directly, as it is only meant to be accessed by the other microservices.
+```
+docker-compose up -d
+```
 
-6. When you are done using the app, you can stop and remove the containers using the following command:
+6. Once the containers are up and running, you can access the various services using the following URLs:
 
-    ```
-    docker-compose down
-    ```
+- Orders App: http://localhost:3000
+- Products App: http://localhost:3002
+- Payments App: http://localhost:3001
+- Users App: http://localhost:3003
+
+Note: The API Gateway App is not accessible directly, as it is only meant to be accessed by the other microservices.
+
+7. When you are done using the app, you can stop and remove the containers using the following command:
+
+```
+docker-compose down
+```
 
 ## Services
 

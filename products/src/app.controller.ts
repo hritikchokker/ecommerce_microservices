@@ -12,7 +12,7 @@ export class AppController implements OnModuleInit, OnModuleDestroy {
   //   },
   // })
   // private readonly client: ClientKafka;
-  constructor(private readonly appService: AppService) {}
+  constructor(private readonly appService: AppService) { }
   async onModuleInit() {
     // const requestPatterns = [
     //   'math.sum.sync.kafka.message',
@@ -37,7 +37,7 @@ export class AppController implements OnModuleInit, OnModuleDestroy {
     // await this.client.close();
   }
   @Get()
-  getHello(): string {
+  async getHello(): Promise<string> {
     return this.appService.getHello();
   }
 }
