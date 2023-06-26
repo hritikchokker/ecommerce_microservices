@@ -3,7 +3,7 @@ import { Kafka, Message } from 'kafkajs';
 @Injectable()
 export class AppService {
   constructor(@Inject('KAFKA') private kafka: Kafka) {
-    this.connectKafka();
+    // this.connectKafka();
   }
 
   async connectKafka(): Promise<void> {
