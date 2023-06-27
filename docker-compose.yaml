@@ -80,6 +80,13 @@ services:
       restart_policy:
         condition: on-failure
 
+  client_web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 3004:3004
+
   zookeeper:
     image: 'wurstmeister/zookeeper:latest'
     ports:

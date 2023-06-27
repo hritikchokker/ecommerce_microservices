@@ -39,6 +39,7 @@ docker-compose up -d
 - Products App: http://localhost:3002
 - Payments App: http://localhost:3001
 - Users App: http://localhost:3003
+- Client Web App: http://localhost:3004
 
 Note: The API Gateway App is not accessible directly, as it is only meant to be accessed by the other microservices.
 
@@ -73,3 +74,8 @@ The database used by the microservices app is Postgres.
 ### API Gateway App
 
 The API Gateway App is responsible for routing requests between the various microservices in the app. It provides a unified API for the ecommerce site.
+
+
+### Client Web App
+
+The Client Web App is the frontend application for the ecommerce site. It can be accessed at http://localhost:3004 and interacts with the microservices via the API Gateway.
