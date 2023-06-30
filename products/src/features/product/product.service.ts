@@ -8,18 +8,22 @@ import { Repository } from 'typeorm';
 @Injectable()
 export class ProductService {
 
-  @InjectRepository(Product)
-  private readonly repository: Repository<Product>;
+  constructor(
+    @InjectRepository(Product)
+    private readonly productRepository: Repository<Product>,
+  ) { }
 
   create(createProductDto: CreateProductDto) {
     return 'This action adds a new product';
   }
 
-  async findAll() {
-    const result = await this.repository.createQueryBuilder('product')
-      .limit(10)
-      .getMany();
-    return result;
+  async findAll(pageNo = 1, limit = 10) {
+    const skip = Number((pageNo - 1) * limit);
+    const [data, total] = await this.productRepository.createQueryBuilder('product')
+      .skip(skip)
+      .take(limit)
+      .getManyAndCount();
+    return [data, total];
   }
 
   findOne(id: number) {

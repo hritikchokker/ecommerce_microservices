@@ -11,6 +11,8 @@ async function bootstrap() {
 
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
   app.setGlobalPrefix('/products');
+  app.enableCors();
+
   await app.listen(port, () => {
     console.log('[WEB]', 'running at port', port);
   });

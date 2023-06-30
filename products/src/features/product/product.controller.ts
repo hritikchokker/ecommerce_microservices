@@ -1,8 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Res } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Res, Req } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { Response } from 'express';
+import { Request, Response } from 'express';
 
 @Controller('product')
 export class ProductController {
@@ -14,12 +14,16 @@ export class ProductController {
   }
 
   @Get()
-  async findAll(@Res() response: Response) {
+  async findAll(@Req() req: Request, @Res() response: Response) {
     try {
-      const res = await this.productService.findAll();
+      const [data, total] = await this.productService.findAll(
+        +req?.query?.pageNo || 1,
+        +req?.query?.limit || 10,
+      );
       return response.status(200).json({
         message: 'product fetched success',
-        data: res
+        data,
+        total
       });
     } catch (error) {
       console.log(error);
