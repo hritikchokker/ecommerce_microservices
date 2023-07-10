@@ -22,8 +22,8 @@ export class ProductImageService {
     return result;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} productImage`;
+  async findOne(id: string) {
+    return await this.repository.findOne({ where: { id } });
   }
 
   update(id: number, updateProductImageDto: UpdateProductImageDto) {

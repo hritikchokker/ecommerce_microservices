@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import axiosInstance from '../../common/axios.instance';
-
+import '../../App.css';
 interface Product {
     id: number;
     u_id: any,
@@ -8,7 +8,43 @@ interface Product {
     name: string;
     price: number;
     description: string;
+    imageId?: string
 }
+
+
+interface ProductImageProps {
+    productId: string;
+}
+
+const ProductImage: React.FC<ProductImageProps> = ({ productId }) => {
+    const [imageData, setImageData] = useState<string | null>(null);
+
+    useEffect(() => {
+        const fetchImage = async () => {
+            try {
+                const { data } = await axiosInstance.get(`/products/product-image/${productId}`);
+                const buffer = Uint8Array.from(data.data.data);
+                const blob = new Blob([buffer], { type: 'image/jpeg' });
+                const imageUrl = URL.createObjectURL(blob);
+                setImageData(imageUrl);
+            } catch (error) {
+                console.error('Error fetching image:', error);
+            }
+        };
+
+        fetchImage();
+    }, [productId]);
+
+    return (
+        <div>
+            {imageData ? (
+                <img src={imageData} alt="Product" />
+            ) : (
+                <div>Loading...</div>
+            )}
+        </div>
+    );
+};
 
 const ProductList: React.FC = () => {
     const [products, setProducts] = useState<Product[]>([]);
@@ -71,13 +107,15 @@ const ProductList: React.FC = () => {
     }
 
     return (
-        <div>
-            <h1>Product List</h1>
+        <div className='flex-wrap'>
             {products.map((product) => (
-                <div key={product.u_id}>
+                <div className='flex-item' key={`${product.u_id}${Math.random()}`}>
                     <h3>{product.name}</h3>
                     <p>Price: ${product.offer_price}</p>
                     <p>{product.description}</p>
+                    <div>
+                        <ProductImage productId={product.imageId} />
+                    </div>
                 </div>
             ))}
             {loading && <div>Loading more...</div>}

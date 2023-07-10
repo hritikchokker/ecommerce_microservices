@@ -5,7 +5,7 @@ export class ProductImage {
 
     @Column({ type: 'uuid' })
     @PrimaryGeneratedColumn()
-    public id!: number;
+    public id!: string;
 
     @Column({ type: 'varchar' })
     public name: string;

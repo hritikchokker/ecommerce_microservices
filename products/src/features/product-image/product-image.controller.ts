@@ -6,7 +6,7 @@ import { Response } from 'express';
 
 @Controller('product-image')
 export class ProductImageController {
-  constructor(private readonly productImageService: ProductImageService) {}
+  constructor(private readonly productImageService: ProductImageService) { }
 
   @Post()
   create(@Body() createProductImageDto: CreateProductImageDto) {
@@ -27,8 +27,18 @@ export class ProductImageController {
     }
   }
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.productImageService.findOne(+id);
+  async findOne(@Param('id') id: string, @Res() res: Response) {
+    try {
+      const productImage = await this.productImageService.findOne(id);
+      return res.status(200).json({
+        message: 'image fetched success',
+        data: productImage
+      });
+    } catch (error) {
+      return res.status(400).json({
+        ...error
+      });
+    }
   }
 
   @Patch(':id')
