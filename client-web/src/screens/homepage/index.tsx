@@ -8,25 +8,26 @@ interface Product {
     name: string;
     price: number;
     description: string;
-    imageId?: string
+    imageId?: string,
+    imagedata?: string,
+    imageData?: string,
 }
 
 
 interface ProductImageProps {
     productId: string;
+    imagedata?: string;
+    imageData?: string;
 }
 
-const ProductImage: React.FC<ProductImageProps> = ({ productId }) => {
+const ProductImage: React.FC<ProductImageProps> = ({ productId, imagedata = "" }) => {
     const [imageData, setImageData] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchImage = async () => {
             try {
                 const { data } = await axiosInstance.get(`/products/product-image/${productId}`);
-                const buffer = Uint8Array.from(data.data.data);
-                const blob = new Blob([buffer], { type: 'image/jpeg' });
-                const imageUrl = URL.createObjectURL(blob);
-                setImageData(imageUrl);
+                setImageData(data.imagedata);
             } catch (error) {
                 console.error('Error fetching image:', error);
             }
@@ -38,7 +39,7 @@ const ProductImage: React.FC<ProductImageProps> = ({ productId }) => {
     return (
         <div>
             {imageData ? (
-                <img src={imageData} alt="Product" />
+                <img src={`data:image/png;base64,${imageData}`} alt="Product" />
             ) : (
                 <div>Loading...</div>
             )}
@@ -52,7 +53,7 @@ const ProductList: React.FC = () => {
     const [error, setError] = useState('');
     const [page, setPage] = useState(1);
     const loaderRef = useRef<HTMLDivElement | null>(null);
-    const LIMIT = 20;
+    const LIMIT = 100;
     useEffect(() => {
         const fetchProducts = async () => {
             try {

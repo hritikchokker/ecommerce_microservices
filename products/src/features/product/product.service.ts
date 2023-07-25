@@ -3,7 +3,8 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from './entities/product.entity';
-import { Repository } from 'typeorm';
+import { Repository, getManager } from 'typeorm';
+import { ProductImage } from '../product-image/entities/product-image.entity';
 
 @Injectable()
 export class ProductService {
@@ -11,6 +12,8 @@ export class ProductService {
   constructor(
     @InjectRepository(Product)
     private readonly productRepository: Repository<Product>,
+    @InjectRepository(ProductImage)
+    private readonly productImageRepository: Repository<ProductImage>,
   ) { }
 
   create(createProductDto: CreateProductDto) {
@@ -19,10 +22,12 @@ export class ProductService {
 
   async findAll(pageNo = 1, limit = 10) {
     const skip = Number((pageNo - 1) * limit);
-    const [data, total] = await this.productRepository.createQueryBuilder('product')
-      .skip(skip)
-      .take(limit)
-      .getManyAndCount();
+    const query = `SELECT * FROM product JOIN product_image ON product."imageId" = product_image.id LIMIT ${limit} OFFSET ${skip};`;
+    const data = await this.productRepository.query(query);
+    // Execute a separate query to get the total count
+    const countQuery = 'SELECT COUNT(*) FROM product;';
+    const totalCount = await this.productRepository.query(countQuery);
+    const total = parseInt(totalCount[0].count, 10);
     return [data, total];
   }
 

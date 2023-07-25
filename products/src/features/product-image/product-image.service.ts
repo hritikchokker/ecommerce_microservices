@@ -4,6 +4,7 @@ import { UpdateProductImageDto } from './dto/update-product-image.dto';
 import { ProductImage } from './entities/product-image.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import * as fs from 'fs';
 
 @Injectable()
 export class ProductImageService {
@@ -22,8 +23,31 @@ export class ProductImageService {
     return result;
   }
 
+
+  async updateImageBase(): Promise<void> {
+    const imagesList = await this.repository
+      .createQueryBuilder('product_image')
+      .limit(5)
+      .getMany();
+    const productList = [];
+    imagesList.forEach((image) => {
+      if (image.data) {
+        const base64 = Buffer.from(image.data).toString('base64');
+        productList.push({ ...image, imageData: base64 });
+      }
+    });
+    const promises = [];
+    productList.forEach((image) => {
+      promises.push(this.repository.update({ id: image.id }, image));
+    });
+    await Promise.all(promises);
+    console.log('operation done');
+  }
+
   async findOne(id: string) {
-    return await this.repository.findOne({ where: { id } });
+    return this.repository.createQueryBuilder('product_image')
+      .where({ id })
+      .getOne();
   }
 
   update(id: number, updateProductImageDto: UpdateProductImageDto) {

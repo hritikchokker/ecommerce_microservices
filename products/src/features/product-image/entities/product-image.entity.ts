@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Product } from 'src/features/product/entities/product.entity';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToOne } from 'typeorm';
 
 @Entity()
 export class ProductImage {
@@ -10,10 +11,11 @@ export class ProductImage {
     @Column({ type: 'varchar' })
     public name: string;
 
-    @Column({type:'bytea'})
+    @Column({ type: 'bytea' })
     data: any
 
-
+    @Column({ type: 'varchar' })
+    imagedata: string
 
     // @Column({ type: 'boolean', default: false })
     // public isDeleted: boolean;
@@ -26,6 +28,9 @@ export class ProductImage {
 
     @CreateDateColumn({ type: 'timestamp' })
     public created_at!: Date;
+
+    // @OneToOne(() => Product, (product) => product.imageId)
+    // product: Product;
 
     // @UpdateDateColumn({ type: 'timestamp' })
     // public updated_at!: Date;

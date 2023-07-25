@@ -21,7 +21,6 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
             logger: 'file',
             synchronize: false, // never use TRUE in production!
         } as TypeOrmModuleOptions;
-        console.log(obj, 'objss');
         return obj;
     }
 }
